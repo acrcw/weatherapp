@@ -26,7 +26,7 @@ const CurrentWeather = ({weatherData}) => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,// view should fill entire screen
-    backgroundColor: "green"
+    backgroundColor: "white"
   },
 
   container: {

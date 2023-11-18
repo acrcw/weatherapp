@@ -3,7 +3,7 @@ import * as Location from 'expo-location'
 import { API_KEY } from '@env'
 export const useGetWeather = () => {
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
     const [weather, setWeather] = useState([]);
     const [location, setLocation] = useState(null);
     // const [lon, setLon] = useState(null);
@@ -21,7 +21,7 @@ export const useGetWeather = () => {
         }
 
     }
-    useEffect(() => {
+    useEffect(async () => {
         const getLocationAndWeather = async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
@@ -32,7 +32,7 @@ export const useGetWeather = () => {
             setLocation(loc.coords);
         };
 
-        getLocationAndWeather();
+        await getLocationAndWeather();
     }, []);
 
     useEffect(() => {
