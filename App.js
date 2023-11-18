@@ -1,31 +1,24 @@
+// App.js
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import * as SplashScreen from 'expo-splash-screen'
+import * as SplashScreen from 'expo-splash-screen';
 import Tabs from "./src/components/Tabs";
-import { StyleSheet, View,Text } from "react-native";
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import { useGetWeather } from "./src/hooks/useGetWeather";
 
 const App = () => {
   const [loading, error, weather] = useGetWeather();
-  useEffect(() => {
-    async function hideSpalshScreen() {
-      await SplashScreen.hideAsync();
-    }
-
-    if (!loading) {
-      hideSpalshScreen();
-    }
-    
-  }, [loading])
 
   if (loading) {
-    
     return (
-      // <View style={[styles.container, styles.horizontal]}>
-      //   <ActivityIndicator size='large' color='#0000ff' />
-      // </View>
       <View style={[styles.container, styles.horizontal]}>
-        <Text> Loading </Text>
+        <ActivityIndicator size='large' color='#0000ff' />
+      </View>
+    );
+  } else if (error) {
+    return (
+      <View style={styles.container}>
+        <Text>Error: {error}</Text>
       </View>
     );
   } else {
@@ -35,7 +28,7 @@ const App = () => {
       </NavigationContainer>
     );
   }
-}
+};
 
 const styles = StyleSheet.create({
   container: {

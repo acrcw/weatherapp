@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
-import * as Location from 'expo-location'
-import { API_KEY } from '@env'
+// useGetWeather.js
+import React, { useState, useEffect } from "react";
+import * as Location from 'expo-location';
+import { API_KEY } from '@env';
 
 export const useGetWeather = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [weather, setWeather] = useState([]);
     const [location, setLocation] = useState(null);
-    // const [lon, setLon] = useState(null);
-    const isInitialMount = useRef(true);
+
     const fetchWeatherData = async () => {
         try {
             if (location) {
@@ -20,28 +20,31 @@ export const useGetWeather = () => {
         } catch (err) {
             setError("Unable to fetch weather");
         }
+    };
 
-    }
-    useEffect(async () => {
+    useEffect(() => {
         const getLocationAndWeather = async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setError("Location permission not granted");
-                return;
+            try {
+                let { status } = await Location.requestForegroundPermissionsAsync();
+                if (status !== 'granted') {
+                    setError("Location permission not granted");
+                    return;
+                }
+                let loc = await Location.getCurrentPositionAsync({});
+                setLocation(loc.coords);
+            } catch (err) {
+                setError("Error getting location");
             }
-            let loc = await Location.getCurrentPositionAsync({});
-            setLocation(loc.coords);
         };
 
-        await getLocationAndWeather();
+        getLocationAndWeather();
     }, []);
 
     useEffect(() => {
-
         if (location) {
             fetchWeatherData();
         }
     }, [location]);
 
-    return [loading, error, weather]
-}
+    return [loading, error, weather];
+};
