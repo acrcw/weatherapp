@@ -1,13 +1,23 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-
+import * as SplashScreen from 'expo-splash-screen'
 import Tabs from "./src/components/Tabs";
 import { StyleSheet, View,Text } from "react-native";
 import { useGetWeather } from "./src/hooks/useGetWeather";
 
 const App = () => {
   const [loading, error, weather] = useGetWeather();
-  
+  useEffect(() => {
+    async function hideSpalshScreen() {
+      await SplashScreen.hideAsync();
+    }
+
+    if (!loading) {
+      hideSpalshScreen();
+    }
+    
+  }, [loading])
+
   if (loading) {
     
     return (
